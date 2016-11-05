@@ -7,7 +7,7 @@
 | dig @199.19.56.1 www.xorp.org +norecurse   |  ;; QUESTION SECTION:<br>;www.xorp.org.			IN	A<br><br>;; AUTHORITY SECTION:<br>xorp.org.		86400	IN	NS	ns2.xorp.org.<br><br>;; ADDITIONAL SECTION:<br>ns2.xorp.org.		86400	IN	A	193.63.58.145|
 | dig @193.63.58.145 www.xorp.org +norecurse   |  ;; QUESTION SECTION:<br>;www.xorp.org.			IN	A<br><br>;; ANSWER SECTION:<br>www.xorp.org.		3600	IN	A	208.74.158.171<br><br>;; AUTHORITY SECTION:<br>xorp.org.		3600	IN	NS	ns2.xorp.org.<br><br>;; ADDITIONAL SECTION:<br>ns2.xorp.org.		3600	IN	A	193.63.58.145|
 
-###2
+### 2
 
 | Query | Result | 
 | ----- | ------ |
@@ -33,3 +33,11 @@
 | dig @192.5.6.30 e2847.dspb.akamaiedge.net. +norecurse |   ;; QUESTION SECTION:<br>;e2847.dspb.akamaiedge.net.	IN	A<br><br>;; AUTHORITY SECTION:<br>akamaiedge.net.		172800	IN	NS	la1.akamaiedge.net.<br><br>;; ADDITIONAL SECTION:<br>la1.akamaiedge.net.	172800	IN	A	184.26.161.192|
 | dig @184.26.161.192 e2847.dspb.akamaiedge.net. +norecurse |   ;; QUESTION SECTION:<br>;e2847.dspb.akamaiedge.net.	IN	A<br><br>;; AUTHORITY SECTION:<br>dspb.akamaiedge.net.	8000	IN	NS	n6dspb.akamaiedge.net.<br><br>;; ADDITIONAL SECTION:<br>n6dspb.akamaiedge.net.	8000	IN	A	23.3.15.50|
 | dig @23.3.15.50 e2847.dspb.akamaiedge.net. +norecurse |     ;; QUESTION SECTION:<br>;e2847.dspb.akamaiedge.net.	IN	A<br><br>;; ANSWER SECTION:<br>e2847.dspb.akamaiedge.net. 20	IN	A	23.214.129.109|
+
+### 3
+
+When querying for newgate.cs.ucl.ac.uk, nsa.nic.uk responded with ns0.ja.net. as the next server to query but did not have a glue record with the IP address for ns0.js.net. This meant going back to the root server to ask for this IP address before continuing the queries for the IP of newgate.cs.ucl.ac.uk
+
+### 4
+
+When querying for www.microsoft.com the answer given was a CNAME record for www.microsoft.com-c-2.edgekey.net. Further queries were required to find the IP of www.microsoft.com because a CNAME record means that www.microsoft.com points to the same IP address that www.microsoft.com-c-2.edgekey.net. points to. As it turned out www.microsoft.com-c-2.edgekey.net. also lead to a CNAME record so more queries had to be made to find the IP of the subsequent domain names.
