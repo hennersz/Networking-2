@@ -87,3 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+#Vim files
+*~
+*.swp
+
+.DS_Store
