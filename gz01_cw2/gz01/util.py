@@ -39,7 +39,7 @@ logger.setLevel(DEBUG2) # do not alter
 # following call to ch.setLevel in order to alter the verbosity of
 # messages output to the console.
 ch = logging.StreamHandler()
-ch.setLevel(DEBUG2)
+ch.setLevel(DEBUG1)
 chformatter = logging.Formatter("%(levelname)-7s: %(message)s")
 ch.setFormatter(chformatter)
 
