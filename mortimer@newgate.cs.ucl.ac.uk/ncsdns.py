@@ -1,39 +1,5 @@
 #!/usr/bin/python
 
- # __    __                                                __       __                       __      __                                   
-# |  \  |  \                                              |  \     /  \                     |  \    |  \                                  
-# | $$  | $$  ______   _______    ______   __    __       | $$\   /  $$  ______    ______  _| $$_    \$$ ______ ____    ______    ______  
-# | $$__| $$ /      \ |       \  /      \ |  \  |  \      | $$$\ /  $$$ /      \  /      \|   $$ \  |  \|      \    \  /      \  /      \ 
-# | $$    $$|  $$$$$$\| $$$$$$$\|  $$$$$$\| $$  | $$      | $$$$\  $$$$|  $$$$$$\|  $$$$$$\\$$$$$$  | $$| $$$$$$\$$$$\|  $$$$$$\|  $$$$$$\
-# | $$$$$$$$| $$    $$| $$  | $$| $$   \$$| $$  | $$      | $$\$$ $$ $$| $$  | $$| $$   \$$ | $$ __ | $$| $$ | $$ | $$| $$    $$| $$   \$$
-# | $$  | $$| $$$$$$$$| $$  | $$| $$      | $$__/ $$      | $$ \$$$| $$| $$__/ $$| $$       | $$|  \| $$| $$ | $$ | $$| $$$$$$$$| $$      
-# | $$  | $$ \$$     \| $$  | $$| $$       \$$    $$      | $$  \$ | $$ \$$    $$| $$        \$$  $$| $$| $$ | $$ | $$ \$$     \| $$      
- # \$$   \$$  \$$$$$$$ \$$   \$$ \$$       _\$$$$$$$       \$$      \$$  \$$$$$$  \$$         \$$$$  \$$ \$$  \$$  \$$  \$$$$$$$ \$$      
- #                                        |  \__| $$                                                                                      
- #                                         \$$    $$                                                                                      
- #                                          \$$$$$$                                                                                       
- #  ______    ______   __       __  _______    ______    ______    ______   _______                                                       
- # /      \  /      \ |  \     /  \|       \  /      \  /      \  /      \ |       \                                                      
-# |  $$$$$$\|  $$$$$$\| $$\   /  $$| $$$$$$$\|  $$$$$$\|  $$$$$$\|  $$$$$$\| $$$$$$$                                                      
-# | $$   \$$| $$  | $$| $$$\ /  $$$| $$__/ $$ \$$__| $$| $$$\| $$ \$$__| $$| $$____                                                       
-# | $$      | $$  | $$| $$$$\  $$$$| $$    $$  |     $$| $$$$\ $$  |     $$| $$    \                                                      
-# | $$   __ | $$  | $$| $$\$$ $$ $$| $$$$$$$  __\$$$$$\| $$\$$\$$ __\$$$$$\ \$$$$$$$\                                                     
-# | $$__/  \| $$__/ $$| $$ \$$$| $$| $$      |  \__| $$| $$_\$$$$|  \__| $$|  \__| $$                                                     
- # \$$    $$ \$$    $$| $$  \$ | $$| $$       \$$    $$ \$$  \$$$ \$$    $$ \$$    $$                                                     
- #  \$$$$$$   \$$$$$$  \$$      \$$ \$$        \$$$$$$   \$$$$$$   \$$$$$$   \$$$$$$                                                      
-                                                                                                                                        
-                                                                                                                                        
-                                                                                                                                        
- # _______   __    __   ______         _______                                 __                                                         
-# |       \ |  \  |  \ /      \       |       \                               |  \                                                        
-# | $$$$$$$\| $$\ | $$|  $$$$$$\      | $$$$$$$\  ______    _______   ______  | $$ __     __   ______    ______                           
-# | $$  | $$| $$$\| $$| $$___\$$      | $$__| $$ /      \  /       \ /      \ | $$|  \   /  \ /      \  /      \                          
-# | $$  | $$| $$$$\ $$ \$$    \       | $$    $$|  $$$$$$\|  $$$$$$$|  $$$$$$\| $$ \$$\ /  $$|  $$$$$$\|  $$$$$$\                         
-# | $$  | $$| $$\$$ $$ _\$$$$$$\      | $$$$$$$\| $$    $$ \$$    \ | $$  | $$| $$  \$$\  $$ | $$    $$| $$   \$$                         
-# | $$__/ $$| $$ \$$$$|  \__| $$      | $$  | $$| $$$$$$$$ _\$$$$$$\| $$__/ $$| $$   \$$ $$  | $$$$$$$$| $$                               
-# | $$    $$| $$  \$$$ \$$    $$      | $$  | $$ \$$     \|       $$ \$$    $$| $$    \$$$    \$$     \| $$                               
- # \$$$$$$$  \$$   \$$  \$$$$$$        \$$   \$$  \$$$$$$$ \$$$$$$$   \$$$$$$  \$$     \$      \$$$$$$$ \$$                               
-
 from copy import copy
 from optparse import OptionParser, OptionValueError
 import pprint
@@ -158,11 +124,6 @@ sys.stdout.flush()
 setdefaulttimeout(TIMEOUT)
 cs = socket(AF_INET, SOCK_DGRAM)
 
-#--------------------------------------------------------------------------------------------------#
-#                                             Parsing code                                         #
-#--------------------------------------------------------------------------------------------------#
-
-#Takes raw data, checks header has valid values and returns the query id and the list of QE objects
 def parseRequest(data):
     requestHeader = Header.fromData(data)
     try:
@@ -181,26 +142,29 @@ def parseRequest(data):
             raise NotImplementedError 
 
     return (requestHeader._id, queries)
-#Takes data and seperates it into list of resource records
+
 def parseRecords(data, offset, noOfItems):
     values = []
     for i in range(noOfItems):
         (record, length) = RR.fromData(data, offset)
         values.append(record)
-        offset += length #increase offset by length of compressed data
+        offset += length
     return (offset, values)
 
 def parseQuestions(data, offset, noOfQuestions):
     questions = []
     for i in range(noOfQuestions):
         questions.append(QE.fromData(data, offset))
-        offset += len(questions[i])#increase offset by length of previous question
+        offset += len(questions[i])
     return (offset, questions)
 
-#gets header and resource records out of data then caches the results
+def printList(items):
+    for item in items:
+        print str(item)
+
 def parseResponse(data, _id):
     responseHeader = Header.fromData(data)
-    try: #check for valid header codes
+    try:
         assert(responseHeader._id == _id)
         assert(responseHeader._opcode == Header.OPCODE_QUERY)
         assert(responseHeader._qr == True)
@@ -231,11 +195,6 @@ def parseResponse(data, _id):
 
     return (questions, answers, authorities, additional)
 
-#---------------------------------------------------------------------------------------------------------#
-#                                                 Caching code                                            #
-#---------------------------------------------------------------------------------------------------------#
-
-#checks if an a record is already in cache, if so replace it otherwise create new AcacheEntry and insert it
 def insertToACache(aRecord):
     expiration = aRecord._ttl + int(time())
     domain = aRecord._dn
@@ -246,7 +205,7 @@ def insertToACache(aRecord):
         d = dict([(address,CacheEntry(expiration=expiration,authoritative=True))])
         acache[domain] = ACacheEntry(d)
 
-#takes a list of answers and adds A records to a cache and c records to c cache
+
 def cacheAnswers(answers):
     for answer in answers:
         if answer._type == RR.TYPE_A:
@@ -257,7 +216,6 @@ def cacheAnswers(answers):
             expiration = answer._ttl + int(time())
             cnamecache[domain] = CnameCacheEntry(cname, expiration)
 
-#adds NS records to ns cache and additional records to a cache
 def cacheNameServers(authorities, additional):
     for authority in authorities:
         if authority._type == RR.TYPE_NS:
@@ -274,51 +232,40 @@ def cacheNameServers(authorities, additional):
         if ns._type == RR.TYPE_A:
             insertToACache(ns)
 
-#-------------------------------------------------------------------------------------------------------------------#
-#                                                   Lookup code                                                     #
-#-------------------------------------------------------------------------------------------------------------------#
-
-#Handles data from response
 def handleResponse(data, _id, cnames):
     (questions, answers, authorities, additional) = parseResponse(data, _id)
-    
+
     if(len(answers) > 0):
         for answer in answers:
-            if answer._type == RR.TYPE_CNAME: #if there are any cname records add it to list of cnames then find address 
+            if answer._type == RR.TYPE_CNAME:
                 cnames.append((answer._dn, answer._cname, answer._ttl))
-                return lookupDomain(answer._cname, cnames)
+                return queryServer(answer._cname, ROOTNS_IN_ADDR, cnames)
         for answer in answers:
-            if answer._type == RR.TYPE_A: #Add a records add them to list then return, answer is found
+            if answer._type == RR.TYPE_A:
                 cnames.append((answer._dn, InetAddr.fromNetwork(answer._addr), answer._ttl))
         return cnames
-    elif len(additional) > 0: #if there are no answers ask name servers
+    elif len(additional) > 0:
         for ns in additional:
             if ns._type == RR.TYPE_A:
-                result = queryServer(questions[0]._dn, inet_ntoa(ns._addr), cnames)
-                if result is not None:
-                    return result
-
+                return queryServer(questions[0]._dn, inet_ntoa(ns._addr), cnames)
     else:
         nameServers = []
         for authority in authorities:
             if authority._type == RR.TYPE_NS:
-                try:
-                    a = lookupDomain(authority._nsdn, []) #try and get ip addresses for all the nameservers
-                except NameError, timeout: #catch errors with server, doesn't matter as long as one gives us an answer
+                a = lookupDomain(authority._nsdn, [])
+                if a is None:
                     continue
                 for i in a:
                     nameServers.append(i)
-        if len(nameServers) == 0:
-            raise LookupError #No nameservers repsponded
         for nameserver in nameServers:
-            result = queryServer(questions[0]._dn,str(nameserver[1]), cnames)#query each nameserver and return if you get an answer
-            if result is not None:
-                return result
+            result = queryServer(questions[0]._dn,str(nameserver[1]), cnames)
+            if result is None:
+                continue
         
 
 def queryServer(domain, serverAddress, cnames):
     timeNow = int(time())
-    if (timeNow - requestReceived) > 60 - TIMEOUT: #check that you haven't been querying for more than 60 seconds
+    if (timeNow - requestReceived) > 55:
         raise timeout
     _id = randint(0, 65535) #random 16 bit int
     queryHeader = Header(_id, Header.OPCODE_QUERY, Header.RCODE_NOERR, 1).pack()
@@ -328,23 +275,23 @@ def queryServer(domain, serverAddress, cnames):
     (data, address) = cs.recvfrom(512)
     return handleResponse(data, _id, cnames)
 
-def getARecords(domain): #checks through acache for a domain 
+def getARecords(domain):
     answers = []
     if domain in acache:
-        expired = [] 
+        expired = []
         entry = acache[domain]._dict
         for address, cache in entry.iteritems():
             if cache._expiration > int(time()):
                 ttl = cache._expiration - int(time())
                 answers.append((domain, address, ttl))
             else:
-                expired.append(address) #cant delete from dict while iterating over it with iteritems so flag for deletion later
+                expired.append(address)
         for address in expired:
-            del entry[address] #delete expried entries
+            del entry[address]
 
     return answers
 
-def lookupNameserver(ns): # lookup the ip addresses of a nameserver. very similar to getting a records just with an extra layer
+def lookupNameserver(ns):
     answers = []
     if ns in nscache:
         nservers = nscache[ns]
@@ -361,13 +308,13 @@ def lookupNameserver(ns): # lookup the ip addresses of a nameserver. very simila
     return answers
     
 
-def lookupDomain(name, answers): #checks the cache for a domain name and if it cant find it starts querying name servers. Answers will be an empty list or contain all the previous c records
+def lookupDomain(name, answers):
     records = getARecords(name)
-    if len(records) > 0: # if a record found in cache return it
+    if len(records) > 0:
         for i in records:
             answers.append(i)
         return answers
-    elif name in cnamecache: #if domain points to a cname resolve for domain it points to.
+    elif name in cnamecache:
         entry = cnamecache[name]
         if entry._expiration > int(time()):
             ttl = entry._expiration - int(time())
@@ -375,44 +322,44 @@ def lookupDomain(name, answers): #checks the cache for a domain name and if it c
             return lookupDomain(entry._cname, answers)
         else:
             del cnamecache[name]
-    else: #check though ns cache for nearest nameserver for the parent of domain we are looking for. 
+    else:
         parent = name.parent()
         records = []
-        while(len(records) == 0): 
-            records = lookupNameserver(parent) #This will always find a nameserver because root name server is saved in cache and cant expire
+        while(len(records) == 0):
+            records = lookupNameserver(parent)
             parent = parent.parent()
         for record in records:
             try:
-                return queryServer(name, str(record[1]), answers) #recurively query server until domain is found
-            except timeout: #ignore timeout as another nameserver may not time out
+                return queryServer(name, str(record[1]), answers)
+            except timeout:
                 continue
-        raise timeout #all timed out so raise error
+        raise timeout
 
-def getAuthority(domain): #checks the cache for the nameservers for a given domain. Should always get a value as this is called immediately after looking up the domain
+def getAuthority(domain):
     parent = domain.parent()
-    if parent == None: #used incase the authority for root is requested, 
+    if parent == None:
         parent = DomainName(".")
     records = []
-    while len(records) == 0:  #check for nameserver for parent domain, if none found try the parent of that
+    while len(records) == 0: 
         records = lookupNameserver(parent)
         if len(records) == 0:
             parent = parent.parent()
     authorities = []
-    for dom in nscache[parent]: #find ip addresses of nameservers found
+    for dom in nscache[parent]:
         if dom in acache:
             ttl = nscache[parent][dom]._expiration - int(time())
             authorities.append((parent, dom, ttl))
 
     return (authorities, records)
 
-def resolve(domain): #finds domain then finds authority for that domain
+def resolve(domain):
     answers = lookupDomain(domain, [])
     if answers is None:
         raise NameError
     (authority, additional) = getAuthority(answers[-1][0])
     return (answers, authority, additional)
 
-def constructPacket(err, data, question, qid): # creates the packet from data, data is a three tuple of lists ([answer], [authroity], [additional])
+def constructPacket(err, data, question, qid):
     header = Header(qid, Header.QUERY, err, 1, len(data[0]), len(data[1]), len(data[2]), True)
     packet = header.pack()
     packet += question.pack()
@@ -450,11 +397,7 @@ while 1:
         error = Header.RCODE_NOERR
     except NameError:
         error = Header.RCODE_NAMEERR
-    except timeout:
-        error = Header.RCODE_SRVFAIL
-    except AttributeError:
-        error = Header.RCODE_SRVFAIL
-    except LookupError:
+    except timeout, AttributeError:
         error = Header.RCODE_SRVFAIL
     except ValueError:
         error = Header.RCODE_FORMATERR
