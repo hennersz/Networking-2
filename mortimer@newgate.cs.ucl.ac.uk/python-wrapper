@@ -1,3 +1,0 @@
-#!/bin/bash
-arch=`uname -m`
-/cs/research/nets/home1/starship/jamieson/arch/$(arch)/bin/python $*
